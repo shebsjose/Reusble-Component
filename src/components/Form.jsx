@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 
 const Form = ({ getData, tableData,  setTableData,
                 inputField, setInputField,
-                  isEditable, setEditable }) => { 
+                  isEditable, setEditable}) => { 
 
  const handleChange = (e) => {
     const { name, value } = e.target;
@@ -13,25 +13,31 @@ const Form = ({ getData, tableData,  setTableData,
  }
 
 const handleSubmit = (e) => {
-     e.preventDefault();
+     e.preventDefault(); 
      getData(inputField)
-     
+     const data = { 
+       id: uuidv4(),
+       isChecked: false,
+        ...inputField
+       }
+
       if(isEditable){
-        tableData.map((row) => {
-          row.id === isEditable.id   
-           const updateValue = {
-            ...inputField,
-            ...isEditable
-           }
-           setTableData(updateValue)
+        const updateValue = tableData.map((item) => {
+         return item.id === isEditable.id ? {...item, ...inputField} : item
         })
+        setTableData(updateValue) 
+        setInputField({ 
+          firstName : '',
+          lastName : '',
+          password : '',
+          state : '',
+          city: '',
+          zipCode : ''
+        })
+        setEditable(null)
       }
-      else{
-        const data = { 
-          id: uuidv4(),
-           ...inputField 
-          }
-          
+      else
+      {   
          setTableData([...tableData, data]);
          const emptyInput= { 
            firstName : '',
@@ -42,6 +48,7 @@ const handleSubmit = (e) => {
            zipCode : ''}
            setInputField(emptyInput)
           }
+
       }
 
   return (
@@ -180,7 +187,7 @@ const handleSubmit = (e) => {
           </button> 
           :
           <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full justify-center">
-            submit
+            Submit
           </button> 
         }
         </div> 
