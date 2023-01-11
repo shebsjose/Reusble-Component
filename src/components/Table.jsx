@@ -5,7 +5,8 @@ const Table = ({
   tableData,
   setTableData,
   setEditable,
-  setInputField
+  setInputField,
+  setShowFavList
 }) => {
   const handleEdit = (data) => {
     console.log("handleEdit data", data);
@@ -36,12 +37,12 @@ const Table = ({
       const updatedValue = tableData.map((item) =>
         item.id === id ? { ...item, isChecked: false } : item
       );
-      setTableData(updatedValue);
+      setShowFavList(updatedValue)
     } else {
       const updatedValue = tableData.map((item) =>
         item.id === id ? { ...item, isChecked: true } : item
       );
-      setTableData(updatedValue);
+      setShowFavList(updatedValue)
     }
   };
 

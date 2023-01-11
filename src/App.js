@@ -37,14 +37,18 @@ function App() {
                   setInputField={setInputField}
                   isEditable={isEditable}
                   setEditable={setEditable}
-             /> 
+                  /> 
             <Table tableData={tableData} 
                    setTableData={setTableData}
                    setEditable={setEditable}
                    setInputField={setInputField}
+                   setShowFavList={setShowFavList}
             />
              <Table 
                     tableData={showFavList} 
+                    // setTableData={setTableData}
+                    // setShowFavList={setShowFavList}
+
               />
                                     
     </div>
