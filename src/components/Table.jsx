@@ -37,12 +37,20 @@ const Table = ({
       const updatedValue = tableData.map((item) =>
         item.id === id ? { ...item, isChecked: false } : item
       );
-      setShowFavList(updatedValue)
+      setTableData(updatedValue)
+      const favlist = tableData.map((item) =>
+        item.id === id ? { ...item, isChecked: false } : item
+      );
+      setShowFavList(favlist)
     } else {
       const updatedValue = tableData.map((item) =>
         item.id === id ? { ...item, isChecked: true } : item
       );
-      setShowFavList(updatedValue)
+      setTableData(updatedValue)
+      const favlist = tableData.map((item) =>
+        item.id === id ? { ...item, isChecked: true } : item
+      );
+      setShowFavList(favlist)
     }
   };
 

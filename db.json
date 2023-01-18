@@ -1,0 +1,43 @@
+{
+  "posts": [{
+      "id": 1,
+      "firstName": "Satheesh",
+      "lastName": "john@mail.com",
+      "password": "12345",
+      "state": "",
+      "city": "",
+      "zipCode": ""
+  }, {
+      "id": 2,
+      "firstName": "John",
+      "lastName": "john@mail.com",
+      "password": "123",
+      "state": "",
+      "city": "",
+      "zipCode": ""
+  }, {
+      "id": 3,
+      "firstName": "Robert",
+      "lastName": "john@mail.com",
+      "password": "1121",
+      "state": "",
+      "city": "",
+      "zipCode": ""
+  }, {
+      "id": 4,
+      "firstName": "Mani",
+      "lastName": "john@mail.com",
+      "password": "153124",
+      "state": "",
+      "city": "",
+      "zipCode": ""
+  }],
+  "comments": [{
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+  }],
+  "profile": {
+      "name": "typicode"
+  }
+}

@@ -1,59 +1,161 @@
 import { v4 as uuidv4 } from "uuid";
 
-const Form = ({ getData, tableData,  setTableData,
-                inputField, setInputField,
-                  isEditable, setEditable}) => { 
-
- const handleChange = (e) => {
+const Form = ({
+  getData,
+  tableData,
+  setTableData,
+  inputField,
+  setInputField,
+  isEditable,
+  setEditable,
+  errors,
+  setErrors
+}) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setInputField((prevState) => ({
       ...prevState,
       [name]: value,
     }));
- }
+  };
 
-const handleSubmit = (e) => {
-     e.preventDefault(); 
-     getData(inputField)
-     const data = { 
-       id: uuidv4(),
-       isChecked: false,
-        ...inputField
-       }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    getData(inputField);
+    const data = {
+      id: uuidv4(),
+      isChecked: false,
+      ...inputField,
+    };
+    if (validate()) {
+      setInputField({});
+    }
 
-      if(isEditable){
-        const updateValue = tableData.map((item) => {
-         return item.id === isEditable.id ? {...item, ...inputField} : item
-        })
-        setTableData(updateValue) 
-        setInputField({ 
-          firstName : '',
-          lastName : '',
-          password : '',
-          state : '',
-          city: '',
-          zipCode : ''
-        })
-        setEditable(null)
+    if (isEditable) {
+      const updateValue = tableData.map((item) => {
+        return item.id === isEditable.id ? { ...item, ...inputField } : item;
+      });
+      setTableData(updateValue);
+      setInputField({
+        firstName: "",
+        lastName: "",
+        password: "",
+        state: "",
+        city: "",
+        zipCode: "",
+      });
+      setEditable(null);
+    } else {
+      setTableData([...tableData, data]);
+      const emptyInput = {
+        firstName: "",
+        lastName: "",
+        password: "",
+        state: "",
+        city: "",
+        zipCode: "",
+      };
+      setInputField(emptyInput);
+    }
+  };
+  const validate = () => {
+    const input = { ...inputField };
+    let errors = {};
+    let isValid = true;
+
+    if (input?.firstName === "") {
+      isValid = false;
+      errors.firstName = "Please enter First Name";
+    } else if (input.firstName?.length > 8) {
+      isValid = false;
+      errors.firstName = "Name cannot exceed 8 characters";
+    }
+
+    if (input?.lastName === "") {
+      isValid = false;
+      errors.lastName = "Please enter Last Name";
+    } else if (input.lastName?.length > 8) {
+      isValid = false;
+      errors.lastName = "Name cannot exceed 8 characters";
+    }
+
+    if (input?.password === "") {
+      isValid = false;
+      errors.password = "Please enter your password.";
+    } else {
+      if (input.password.length > 6) {
+        isValid = false;
+        errors.password = "Please enter six length password.";
       }
-      else
-      {   
-         setTableData([...tableData, data]);
-         const emptyInput= { 
-           firstName : '',
-           lastName : '',
-           password : '',
-           state : '',
-           city: '',
-           zipCode : ''}
-           setInputField(emptyInput)
-          }
+    }
 
+    if (input?.state === "") {
+      isValid = false;
+      errors.state = "Please enter State Name";
+    } 
+
+    if (input?.city === "") {
+      isValid = false;
+      errors.city = "Please enter City Name";
+    } 
+
+    if (input?.zipCode === "") {
+      isValid = false;
+      errors.zipCode = "Please enter Zip Code";
+    } 
+
+    setErrors(errors);
+    return isValid;
+  };
+
+
+  const handleBlur = () => {
+    const input = { ...inputField };
+    let errors = {};
+    let isValid = true;
+
+    if (input?.firstName === "") {
+      isValid = false;
+      errors.firstName = "First name is required";
+      if (input?.lastName === "") {
+        isValid = false;
+        errors.lastName = "Last name is required";
       }
+    } 
+
+    else if (input?.lastName === "") {
+      isValid = false;
+      errors.lastName = "Last name is required";
+    }
+
+    else if (input?.password === "") {
+      isValid = false;
+      errors.password = "Passowrd is required";
+    }
+
+    else if (input?.state === "") {
+      isValid = false;
+      errors.state = "State is required";
+    } 
+
+    else if (input?.city === "") {
+      isValid = false;
+      errors.city = "City is required";
+    } 
+
+    else if (input?.zipCode === "") {
+      isValid = false;
+      errors.zipCode = "Zip code is required";
+    } 
+
+     setErrors(errors);
+    return isValid;
+  };
 
   return (
-    <form className="w-full max-w-lg mt-12 px-6 pt-6 pb-8 mb-4"
-          onSubmit={handleSubmit}
+    <form
+      className="w-full max-w-lg mt-12 px-6 pt-6 pb-8 mb-4"
+      onSubmit={handleSubmit}
     >
       <div className="flex flex-wrap -mx-3 mb-6">
         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
@@ -71,7 +173,9 @@ const handleSubmit = (e) => {
             name="firstName"
             value={inputField.firstName}
             onChange={handleChange}
+            onBlur={handleBlur} 
           />
+           {errors.firstName && <div className="text-sm text-red-700">{errors.firstName}</div>}
         </div>
         <div className="w-full md:w-1/2 px-3">
           <label
@@ -88,7 +192,9 @@ const handleSubmit = (e) => {
             name="lastName"
             value={inputField.lastName}
             onChange={handleChange}
+            onBlur={handleBlur} 
           />
+           {errors.lastName && <div className="text-sm text-red-700">{errors.lastName}</div>}
         </div>
       </div>
       <div className="flex flex-wrap -mx-3 mb-6">
@@ -111,11 +217,13 @@ const handleSubmit = (e) => {
           <p className="text-gray-600 text-xs italic">
             Make it as long and as crazy as you'd like
           </p>
+          {errors.password && <div className="text-sm text-red-700">{errors.password}</div>}
         </div>
       </div>
       <div className="flex flex-wrap -mx-3 mb-2">
         <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
           <label
+        
             className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
             htmlFor="grid-city"
           >
@@ -129,7 +237,9 @@ const handleSubmit = (e) => {
             name="state"
             value={inputField.state}
             onChange={handleChange}
+            onBlur={handleBlur} 
           />
+           {errors.state && <div className="text-sm text-red-700">{errors.state}</div>}
         </div>
         <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
           <label
@@ -143,8 +253,10 @@ const handleSubmit = (e) => {
               className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               id="grid-state"
               name="city"
+              placeholder="Select the City"
               value={inputField.city}
               onChange={handleChange}
+              onBlur={handleBlur} 
             >
               <option>Indore</option>
               <option>Bhopal</option>
@@ -162,6 +274,7 @@ const handleSubmit = (e) => {
               </svg>
             </div>
           </div>
+          {errors.city && <div className="text-sm text-red-700">{errors.city}</div>}
         </div>
         <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
           <label
@@ -178,20 +291,21 @@ const handleSubmit = (e) => {
             name="zipCode"
             value={inputField.zipCode}
             onChange={handleChange}
+            onBlur={handleBlur} 
           />
+            {errors.zipCode && <div className="text-sm text-red-700">{errors.zipCode}</div>}
         </div>
         <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0 mt-5">
-          {isEditable ? 
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full justify-center">
-           Save
-          </button> 
-          :
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full justify-center">
-            Submit
-          </button> 
-        }
-        </div> 
-         
+          {isEditable ? (
+            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full justify-center">
+              Save
+            </button>
+          ) : (
+            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full justify-center">
+              Submit
+            </button>
+          )}
+        </div>
       </div>
     </form>
   );
