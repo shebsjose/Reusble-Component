@@ -102,55 +102,70 @@ const Form = ({
     if (input?.zipCode === "") {
       isValid = false;
       errors.zipCode = "Please enter Zip Code";
-    } 
-
+    }
     setErrors(errors);
     return isValid;
   };
 
 
-  const handleBlur = () => {
+  const handleFirstNameBlur = () => {
     const input = { ...inputField };
-    let errors = {};
-    let isValid = true;
-
+    console.log(input)
     if (input?.firstName === "") {
-      isValid = false;
-      errors.firstName = "First name is required";
-      if (input?.lastName === "") {
-        isValid = false;
-        errors.lastName = "Last name is required";
-      }
-    } 
-
-    else if (input?.lastName === "") {
-      isValid = false;
-      errors.lastName = "Last name is required";
+      setErrors({...errors, firstNameError: "FirstName is required"})
+    } else {
+      setErrors({...errors, firstNameError: ""})
     }
+  }
 
-    else if (input?.password === "") {
-      isValid = false;
-      errors.password = "Passowrd is required";
+  const handleLastNameBlur = () => {
+    const input = { ...inputField };
+    if (input?.lastName === "") {
+      setErrors({...errors, lastNameError: "LastName is required"})
+    } else {
+      setErrors({...errors, lastNameError: ""})
     }
+  }
 
-    else if (input?.state === "") {
-      isValid = false;
-      errors.state = "State is required";
+  const handlePasswordBlur = () => {
+    const input = { ...inputField };
+    if (input?.password === "") {
+      setErrors({...errors, passwordError: "Password is required"});
+    }
+    else {
+      setErrors({...errors, passwordError: ""})
+  }
+}
+
+  const handleStateBlur = () => {
+    const input = { ...inputField };
+    if (input?.state === "") {
+      setErrors({...errors, stateError: "State is required"});
+  }
+  else {
+    setErrors({...errors, stateError: ""})
+}
+}
+
+  const handleCityBlur = () => {
+    const input = { ...inputField };
+    if (input?.city === "") {
+      setErrors({...errors, cityError: "City is required"});
     } 
+    else {
+      setErrors({...errors, cityError: ""})
+  }
+  }
 
-    else if (input?.city === "") {
-      isValid = false;
-      errors.city = "City is required";
+  const handleZipeCodeBlur = () => {
+    const input = { ...inputField };
+    if (input?.zipCode === "") {
+      setErrors({...errors, zipCodeError: "Zip code is required"});
     } 
-
-    else if (input?.zipCode === "") {
-      isValid = false;
-      errors.zipCode = "Zip code is required";
-    } 
-
-     setErrors(errors);
-    return isValid;
-  };
+    else {
+      setErrors({...errors, zipCodeError: ""})
+  }
+  }
 
   return (
     <form
@@ -173,9 +188,9 @@ const Form = ({
             name="firstName"
             value={inputField.firstName}
             onChange={handleChange}
-            onBlur={handleBlur} 
+            onBlur={handleFirstNameBlur} 
           />
-           {errors.firstName && <div className="text-sm text-red-700">{errors.firstName}</div>}
+           {errors.firstNameError && <div className="text-sm text-red-700">{errors.firstNameError}</div>}
         </div>
         <div className="w-full md:w-1/2 px-3">
           <label
@@ -192,9 +207,9 @@ const Form = ({
             name="lastName"
             value={inputField.lastName}
             onChange={handleChange}
-            onBlur={handleBlur} 
+            onBlur={handleLastNameBlur} 
           />
-           {errors.lastName && <div className="text-sm text-red-700">{errors.lastName}</div>}
+           {errors.lastNameError && <div className="text-sm text-red-700">{errors.lastNameError}</div>}
         </div>
       </div>
       <div className="flex flex-wrap -mx-3 mb-6">
@@ -213,11 +228,12 @@ const Form = ({
             name="password"
             value={inputField.password}
             onChange={handleChange}
+            onBlur={handlePasswordBlur} 
           />
           <p className="text-gray-600 text-xs italic">
             Make it as long and as crazy as you'd like
           </p>
-          {errors.password && <div className="text-sm text-red-700">{errors.password}</div>}
+          {errors.passwordError && <div className="text-sm text-red-700">{errors.passwordError}</div>}
         </div>
       </div>
       <div className="flex flex-wrap -mx-3 mb-2">
@@ -237,9 +253,9 @@ const Form = ({
             name="state"
             value={inputField.state}
             onChange={handleChange}
-            onBlur={handleBlur} 
+            onBlur={handleStateBlur}
           />
-           {errors.state && <div className="text-sm text-red-700">{errors.state}</div>}
+           {errors.stateError && <div className="text-sm text-red-700">{errors.stateError}</div>}
         </div>
         <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
           <label
@@ -256,7 +272,7 @@ const Form = ({
               placeholder="Select the City"
               value={inputField.city}
               onChange={handleChange}
-              onBlur={handleBlur} 
+              onBlur={handleCityBlur} 
             >
               <option>Indore</option>
               <option>Bhopal</option>
@@ -274,7 +290,7 @@ const Form = ({
               </svg>
             </div>
           </div>
-          {errors.city && <div className="text-sm text-red-700">{errors.city}</div>}
+          {errors.cityError && <div className="text-sm text-red-700">{errors.cityError}</div>}
         </div>
         <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
           <label
@@ -291,9 +307,9 @@ const Form = ({
             name="zipCode"
             value={inputField.zipCode}
             onChange={handleChange}
-            onBlur={handleBlur} 
+            onBlur={handleZipeCodeBlur} 
           />
-            {errors.zipCode && <div className="text-sm text-red-700">{errors.zipCode}</div>}
+            {errors.zipCodeError && <div className="text-sm text-red-700">{errors.zipCodeError}</div>}
         </div>
         <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0 mt-5">
           {isEditable ? (

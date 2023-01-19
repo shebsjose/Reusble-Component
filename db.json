@@ -4,33 +4,33 @@
       "firstName": "Satheesh",
       "lastName": "john@mail.com",
       "password": "12345",
-      "state": "",
-      "city": "",
-      "zipCode": ""
+      "state": "M.P",
+      "city": "Mandsour",
+      "zipCode": "4523"
   }, {
       "id": 2,
       "firstName": "John",
       "lastName": "john@mail.com",
       "password": "123",
-      "state": "",
-      "city": "",
-      "zipCode": ""
+      "state": "U.P",
+      "city": "Ujjain",
+      "zipCode": "4856"
   }, {
       "id": 3,
       "firstName": "Robert",
       "lastName": "john@mail.com",
       "password": "1121",
-      "state": "",
-      "city": "",
-      "zipCode": ""
+      "state": "Kerala",
+      "city": "Kannur",
+      "zipCode": "56688"
   }, {
       "id": 4,
       "firstName": "Mani",
       "lastName": "john@mail.com",
       "password": "153124",
-      "state": "",
-      "city": "",
-      "zipCode": ""
+      "state": "Assam",
+      "city": "ABCD",
+      "zipCode": "53844"
   }],
   "comments": [{
       "id": 1,
