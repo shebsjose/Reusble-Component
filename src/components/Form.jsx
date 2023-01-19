@@ -1,4 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Form = ({
   getData,
@@ -57,7 +59,16 @@ const Form = ({
       };
       setInputField(emptyInput);
     }
+    try {
+      axios.post("http://localhost:3000/posts");
+      toast.success('Successfully Created the list');
+  } 
+  catch (error) {
+    console.log(error);
+    toast.error(error.response.data);
+  }
   };
+
   const validate = () => {
     const input = { ...inputField };
     let errors = {};
