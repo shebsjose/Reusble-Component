@@ -34,12 +34,10 @@ console.log(errors)
   const handleApi = async () => {
      const data = await axios("http://localhost:3000/posts");
     //  const {data} = await axios("http://localhost:3000/posts");
-    console.log("----data----", data)
      setTableData(data.data);
     //  setTableData(data);
-
   }
-
+console.log(tableData)
   useEffect(() => {
     const filterArray = tableData.filter((item) => item.isChecked === true);
     setShowFavList(filterArray)

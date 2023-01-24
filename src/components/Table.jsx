@@ -8,8 +8,7 @@ const Table = ({
   setInputField,
   setShowFavList
 }) => {
-  const handleEdit = (data) => {
-    console.log("handleEdit data", data);
+  const handleEdit = (data) => {       
     setInputField({
       id: data.id,
       firstName: data.firstName,

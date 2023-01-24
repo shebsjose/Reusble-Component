@@ -11,12 +11,12 @@
     },
     {
       "id": 2,
-      "firstName": "John",
-      "lastName": "john@mail.com",
+      "firstName": "shubham",
+      "lastName": "shubham@mail.com",
       "password": "123",
-      "state": "U.P",
-      "city": "Ujjain",
-      "zipCode": "4856"
+      "state": "MP",
+      "city": "Indore",
+      "zipCode": "452011"
     },
     {
       "id": 3,
@@ -37,7 +37,14 @@
       "zipCode": "53844"
     },
     {
-      "id": 5
+      "id": "ed7bfd03-a94f-4ccf-9732-7adf108bf377",
+      "isChecked": false,
+      "firstName": "NEW ENTRY",
+      "lastName": "NEW",
+      "password": "",
+      "state": "",
+      "city": "",
+      "zipCode": ""
     }
   ],
   "comments": [

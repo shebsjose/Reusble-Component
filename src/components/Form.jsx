@@ -21,14 +21,28 @@ const Form = ({
     }));
   };
 
+  const editData = (updatedValue) => {
+    console.log(updatedValue, "updatedValue")
+    const putData = axios.patch(`http://localhost:3000/posts/${updatedValue.id}`, updatedValue)
+    .then(res => console.log(res.data.updatedValue));
+     console.log("----putData----",putData)
+  }
+
+
+  const emptyInput = {
+    firstName: "",
+    lastName: "",
+    password: "",
+    state: "",
+    city: "",
+    zipCode: "",
+  };
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     getData(inputField);
-    const data = {
-      id: uuidv4(),
-      isChecked: false,
-      ...inputField,
-    };
+    
+
     if (validate()) {
       setInputField({});
     }
@@ -38,37 +52,28 @@ const Form = ({
         return item.id === isEditable.id ? { ...item, ...inputField } : item;
       });
       setTableData(updateValue);
-      setInputField({
-        firstName: "",
-        lastName: "",
-        password: "",
-        state: "",
-        city: "",
-        zipCode: "",
-      });
+      editData(inputField);
+      setInputField(emptyInput);
       setEditable(null);
+
     } else {
-      setTableData([...tableData, data]);
-      const emptyInput = {
-        firstName: "",
-        lastName: "",
-        password: "",
-        state: "",
-        city: "",
-        zipCode: "",
+      const data = {
+        id: uuidv4(),
+        isChecked: false,
+        ...inputField,
       };
+  
+      axios.post("http://localhost:3000/posts", data)
+       .then(response => { 
+        setTableData([...tableData,response.data]);
+        toast.success('Successfully Created the list');
+      });
+
+      // setTableData([...tableData, data]);
       setInputField(emptyInput);
     }
-    try {
-      axios.post("http://localhost:3000/posts");
-      toast.success('Successfully Created the list');
-  } 
-  catch (error) {
-    console.log(error);
-    toast.error(error.response.data);
-  }
   };
-
+  
   const validate = () => {
     const input = { ...inputField };
     let errors = {};
