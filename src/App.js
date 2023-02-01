@@ -9,6 +9,7 @@ function App() {
     firstName : '',
     lastName : '',
     password : '',
+    country : '',
     state : '',
     city: '',
     zipCode : '',  
@@ -17,6 +18,7 @@ function App() {
     firstNameError : '',
     lastNameError : '',
     passwordError : '',
+    CountryError: '',
     stateError : '',
     cityError: '',
     zipCodeError : '',  
@@ -26,10 +28,12 @@ function App() {
   const [tableData, setTableData]= useState([]);
   const [isEditable, setEditable] = useState(null);
   const [showFavList, setShowFavList] = useState([]);
-console.log(errors)
+
   useEffect(() => {
     handleApi();
   }, []);
+
+console.log("--inputField--",inputField)
 
   const handleApi = async () => {
      const data = await axios("http://localhost:3000/posts");
@@ -37,7 +41,7 @@ console.log(errors)
      setTableData(data.data);
     //  setTableData(data);
   }
-console.log(tableData)
+
   useEffect(() => {
     const filterArray = tableData.filter((item) => item.isChecked === true);
     setShowFavList(filterArray)

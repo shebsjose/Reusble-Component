@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
 
 const Table = ({
   tableData,
@@ -14,6 +15,7 @@ const Table = ({
       firstName: data.firstName,
       lastName: data.lastName,
       password: data.password,
+      country: data.country,
       state: data.state,
       city: data.city,
       zipCode: data.zipCode,
@@ -21,11 +23,17 @@ const Table = ({
     setEditable(data);
   };
 
+  const deleteData = (id) => {
+    axios.delete(`http://localhost:3000/posts/${id}`, tableData)
+    .then(res => console.log(res.data));
+  }
+
   const handleDelete = (id) => {
     const filterData = tableData.filter((row) => {
       return row.id !== id;
     });
     setTableData(filterData);
+    deleteData(id)
   };
 
 
@@ -127,6 +135,9 @@ const Table = ({
                         </td>
                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                           {data.lastName}
+                        </td>
+                        <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                          {data.country}
                         </td>
                         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                           {data.state}

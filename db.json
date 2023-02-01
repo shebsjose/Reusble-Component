@@ -1,42 +1,6 @@
 {
   "posts": [
     {
-      "id": 1,
-      "firstName": "Satheesh",
-      "lastName": "john@mail.com",
-      "password": "12345",
-      "state": "M.P",
-      "city": "Mandsour",
-      "zipCode": "4523"
-    },
-    {
-      "id": 2,
-      "firstName": "shubham",
-      "lastName": "shubham@mail.com",
-      "password": "123",
-      "state": "MP",
-      "city": "Indore",
-      "zipCode": "452011"
-    },
-    {
-      "id": 3,
-      "firstName": "Robert",
-      "lastName": "john@mail.com",
-      "password": "1121",
-      "state": "Kerala",
-      "city": "Kannur",
-      "zipCode": "56688"
-    },
-    {
-      "id": 4,
-      "firstName": "Mani",
-      "lastName": "john@mail.com",
-      "password": "153124",
-      "state": "Assam",
-      "city": "ABCD",
-      "zipCode": "53844"
-    },
-    {
       "id": "ed7bfd03-a94f-4ccf-9732-7adf108bf377",
       "isChecked": false,
       "firstName": "NEW ENTRY",
@@ -47,13 +11,7 @@
       "zipCode": ""
     }
   ],
-  "comments": [
-    {
-      "id": 1,
-      "body": "some comment",
-      "postId": 1
-    }
-  ],
+  "comments": [],
   "profile": {
     "name": "typicode"
   }

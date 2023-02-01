@@ -1,6 +1,8 @@
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
+import { useEffect } from "react";
 import { toast } from "react-toastify";
+import {City, Country, State} from "country-state-city";
 
 const Form = ({
   getData,
@@ -13,19 +15,36 @@ const Form = ({
   errors,
   setErrors
 }) => {
+
+  const countries = Country.getAllCountries();
+
+  const updatedCountries = countries
+      .map((country) => ({ label: country.name, value: country.isoCode, ...country }));
+      // console.log("--updatedCountries--", updatedCountries)
+       
+  const updatedState =
+     State.getStatesOfCountry(inputField.country)
+    .map((state) => ({ label: state.name, value: state.isoCode, ...state }));
+      // console.log("--updatedStates--",  updatedState)
+  
+  const updatedCities  = City.getCitiesOfState(inputField.country, inputField.state)
+      .map((city) => ({ label: city.name, value: city.isoCode, ...city }));
+     // console.log("--updatedCities--", City.getCitiesOfState(inputField.country, inputField.state))
+ 
+  useEffect(() => {}, [inputField]);
+
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setInputField((prevState) => ({
       ...prevState,
       [name]: value,
-    }));
+    })); 
   };
 
   const editData = (updatedValue) => {
-    console.log(updatedValue, "updatedValue")
-    const putData = axios.patch(`http://localhost:3000/posts/${updatedValue.id}`, updatedValue)
+    axios.patch(`http://localhost:3000/posts/${updatedValue.id}`, updatedValue)
     .then(res => console.log(res.data.updatedValue));
-     console.log("----putData----",putData)
   }
 
 
@@ -126,7 +145,6 @@ const Form = ({
 
   const handleFirstNameBlur = () => {
     const input = { ...inputField };
-    console.log(input)
     if (input?.firstName === "") {
       setErrors({...errors, firstNameError: "FirstName is required"})
     } else {
@@ -151,6 +169,17 @@ const Form = ({
     else {
       setErrors({...errors, passwordError: ""})
   }
+}
+
+
+const handleCountryBlur = () => {
+  const input = { ...inputField };
+  if (input?.country === "") {
+    setErrors({...errors, countryError: "Country is required"});
+}
+else {
+  setErrors({...errors, countryError: ""})
+}
 }
 
   const handleStateBlur = () => {
@@ -253,25 +282,79 @@ const Form = ({
         </div>
       </div>
       <div className="flex flex-wrap -mx-3 mb-2">
+      <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+          <label
+            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+            htmlFor="grid-state"
+          >
+            Country
+          </label>
+          <div className="relative">
+            <select
+              className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              id="grid-state"
+              type="select"
+              placeholder="Select the Country"
+              name="country"
+              value={inputField.country}
+              onChange={(e) => {
+                setInputField({...inputField , country: e.target.value, state: null, city: null });
+              }}
+              onBlur={handleCountryBlur} 
+            >
+              {updatedCountries.map((country) => {
+             return (<option value={ country.isoCode }>{country.label}</option>)
+            })}
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+              <svg
+                className="fill-current h-4 w-4"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+              </svg>
+            </div>
+          </div>
+          {errors.countryError && <div className="text-sm text-red-700">{errors.countryError}</div>}
+        </div>
         <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
           <label
-        
             className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-            htmlFor="grid-city"
+            htmlFor="grid-state"
           >
             State
           </label>
-          <input
-            className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            id="grid-city"
-            type="text"
-            placeholder="State name"
-            name="state"
-            value={inputField.state}
-            onChange={handleChange}
-            onBlur={handleStateBlur}
-          />
-           {errors.stateError && <div className="text-sm text-red-700">{errors.stateError}</div>}
+          <div className="relative">
+            <select
+              className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              id="grid-state"
+              type="select"
+              placeholder="Select the State"
+              name="state"
+              value={inputField.state}
+              onBlur={handleStateBlur} 
+              onChange={(e) => {
+                setInputField({ ...inputField , state: e.target.value , city: null });
+              }}
+            >
+            {updatedState.map((state) => {
+             return (
+             <option value={ state.isoCode ? state.isoCode : "" }>{state.label}</option>
+             )
+            })}
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+              <svg
+                className="fill-current h-4 w-4"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+              </svg>
+            </div>
+          </div>
+          {errors.stateError && <div className="text-sm text-red-700">{errors.stateError}</div>}
         </div>
         <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
           <label
@@ -284,17 +367,18 @@ const Form = ({
             <select
               className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               id="grid-state"
-              name="city"
+              type="select"
               placeholder="Select the City"
+              name="city"
               value={inputField.city}
-              onChange={handleChange}
               onBlur={handleCityBlur} 
+              onChange={(e) => {
+                setInputField({...inputField , city: e.target.value });
+              }}
             >
-              <option>Indore</option>
-              <option>Bhopal</option>
-              <option>Ujjain</option>
-              <option>Ratlam</option>
-              <option>Dewas</option>
+            {updatedCities.map((city) => {
+             return (<option value={ city.isoCode ? city.isoCode : "" }>{city.label}</option>)
+            })}
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
               <svg
