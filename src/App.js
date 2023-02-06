@@ -24,16 +24,20 @@ function App() {
     zipCodeError : '',  
   }
   const [inputField, setInputField] = useState(initialValues);
-  const [errors, setErrors] = useState(initialErrors)                                       
   const [tableData, setTableData]= useState([]);
   const [isEditable, setEditable] = useState(null);
   const [showFavList, setShowFavList] = useState([]);
+  const [errors, setErrors] = useState(initialErrors)                                       
+  const [countryList, setCountryList] = useState([]);
+  const [stateList, setStateList] = useState([]);
+  const [cityList, setCityList] = useState([]);
+  
 
   useEffect(() => {
     handleApi();
   }, []);
-
-console.log("--inputField--",inputField)
+  console.log("--inputField--",inputField)
+console.log("--cityList--",cityList)
 
   const handleApi = async () => {
      const data = await axios("http://localhost:3000/posts");
@@ -54,14 +58,20 @@ console.log("--inputField--",inputField)
   return (
     <div className="App">
             <Form getData={getData} 
-                  tableData={tableData}  
-                  setTableData={setTableData} 
                   inputField={inputField}
                   setInputField={setInputField}
+                  tableData={tableData}  
+                  setTableData={setTableData} 
                   isEditable={isEditable}
                   setEditable={setEditable}
                   errors={errors}
                   setErrors={setErrors}
+                  countryList={countryList}
+                  setCountryList={setCountryList}
+                  stateList={stateList}
+                  setStateList={setStateList}
+                  cityList={cityList}
+                  setCityList={setCityList}
                   /> 
             <Table tableData={tableData} 
                    setTableData={setTableData}

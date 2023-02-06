@@ -2,44 +2,108 @@ import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
-import {City, Country, State} from "country-state-city";
+// import { getStateByCode } from "country-state-city/lib/state";
+// import {City, Country, State} from "country-state-city";
 
 const Form = ({
   getData,
-  tableData,
-  setTableData,
   inputField,
   setInputField,
+  tableData,
+  setTableData,
   isEditable,
   setEditable,
   errors,
-  setErrors
+  setErrors,
+  countryList,
+  setCountryList,
+  stateList,
+  setStateList,
+  cityList,
+  setCityList,
 }) => {
 
-  const countries = Country.getAllCountries();
+  // const countries = Country.getAllCountries();
 
-  const updatedCountries = countries
-      .map((country) => ({ label: country.name, value: country.isoCode, ...country }));
-      // console.log("--updatedCountries--", updatedCountries)
+  // const updatedCountries = countries
+  //     .map((country) => ({ label: country.name, value: country.isoCode, ...country }));
+  //     // console.log("--updatedCountries--", updatedCountries)
        
-  const updatedState =
-     State.getStatesOfCountry(inputField.country)
-    .map((state) => ({ label: state.name, value: state.isoCode, ...state }));
-      // console.log("--updatedStates--",  updatedState)
+  // const updatedState =
+  //    State.getStatesOfCountry(inputField.country)
+  //   .map((state) => ({ label: state.name, value: state.isoCode, ...state }));
+  //     // console.log("--updatedStates--",  updatedState)
   
-  const updatedCities  = City.getCitiesOfState(inputField.country, inputField.state)
-      .map((city) => ({ label: city.name, value: city.isoCode, ...city }));
-     // console.log("--updatedCities--", City.getCitiesOfState(inputField.country, inputField.state))
+  // const updatedCities  = City.getCitiesOfState(inputField.country, inputField.state)
+  //     .map((city) => ({ label: city.name, value: city.isoCode, ...city }));
+  //    // console.log("--updatedCities--", City.getCitiesOfState(inputField.country, inputField.state))
  
-  useEffect(() => {}, [inputField]);
+  // useEffect(() => {}, [inputField]);
 
+
+ useEffect(() => { 
+  getAllCountry()
+  },[]);
+
+  const countryOptions = {
+    method: 'GET',
+    url: 'https://api.countrystatecity.in/v1/countries',
+    headers: {
+      'X-CSCAPI-KEY': 'WXJoMFpnUUQxWUJrbk9heTBUbDdZbW1yNkpTYWt0bGZVMWtVWEdiZQ==',
+    }
+  };
+  
+  const getAllCountry = async () => {
+    axios.request(countryOptions).then(function (response){
+      setCountryList(response.data)
+      //console.log("--response--",response.data);
+    }).catch(function (error) {
+      console.error(error);
+    });
+ }
+
+
+
+const getCountryByState = async (inputField) => {
+  const stateOptions = {
+    method: 'GET',
+    url: `https://api.countrystatecity.in/v1/countries/${inputField.country}/states`,
+    headers: {
+      'X-CSCAPI-KEY': 'WXJoMFpnUUQxWUJrbk9heTBUbDdZbW1yNkpTYWt0bGZVMWtVWEdiZQ==',
+    }
+  }; 
+
+  axios.request(stateOptions).then(function (response){
+    setStateList(response.data)
+    //console.log("--setresponse--",response.data);
+  }).catch(function (error) {
+    console.error(error);
+  });
+}
+
+const getStateByCity = async (inputField) => {
+  const cityOptions = {
+    method: 'GET',
+    url: `https://api.countrystatecity.in/v1/countries/${inputField.country}/states/${inputField.state}/cities`,
+    headers: {
+      'X-CSCAPI-KEY': 'WXJoMFpnUUQxWUJrbk9heTBUbDdZbW1yNkpTYWt0bGZVMWtVWEdiZQ==',
+    }
+  }; 
+
+  axios.request(cityOptions).then(function (response){
+    setCityList(response.data)
+    console.log("--setresponse--",response.data);
+  }).catch(function (error) {
+    console.error(error);
+  });
+}
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setInputField((prevState) => ({
       ...prevState,
       [name]: value,
-    })); 
+    }));
   };
 
   const editData = (updatedValue) => {
@@ -299,11 +363,12 @@ else {
               value={inputField.country}
               onChange={(e) => {
                 setInputField({...inputField , country: e.target.value, state: null, city: null });
+                getCountryByState({...inputField , country: e.target.value})
               }}
               onBlur={handleCountryBlur} 
             >
-              {updatedCountries.map((country) => {
-             return (<option value={ country.isoCode }>{country.label}</option>)
+              {countryList?.map((country) => {
+             return (<option value={ country.iso2 }>{country.name}</option>)
             })}
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
@@ -336,11 +401,12 @@ else {
               onBlur={handleStateBlur} 
               onChange={(e) => {
                 setInputField({ ...inputField , state: e.target.value , city: null });
+                getStateByCity({ ...inputField , state: e.target.value , })
               }}
             >
-            {updatedState.map((state) => {
+            {stateList?.map((state) => {
              return (
-             <option value={ state.isoCode ? state.isoCode : "" }>{state.label}</option>
+             <option value={ state.iso2 ? state.iso2 : "" }>{state.name}</option>
              )
             })}
             </select>
@@ -376,8 +442,8 @@ else {
                 setInputField({...inputField , city: e.target.value });
               }}
             >
-            {updatedCities.map((city) => {
-             return (<option value={ city.isoCode ? city.isoCode : "" }>{city.label}</option>)
+            {cityList.map((city) => {
+             return (<option value={ city.iso2 ? city.iso2 : "" }>{city.name}</option>)
             })}
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
